@@ -1,3 +1,7 @@
+# Author Carlouie
+# Created August 10, 2018
+# Updated August 11, 2018
+
 import pygame
 import time
 import random
