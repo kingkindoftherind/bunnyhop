@@ -2,8 +2,6 @@
 # Created August 10, 2018
 # Updated August 11, 2018
 
-#beep boop
-
 import pygame
 import time
 import random
@@ -12,7 +10,7 @@ pygame.init()
 
 #CONSTANT VARIABLES
 
-#BACKGROUND
+#ENVIRONMENT
 display_width = 800
 display_height = 600
 
@@ -44,6 +42,11 @@ bunnyImg = pygame.transform.scale(bunnyImg, (50,75))
 
 
 #GAME ITEMS
+
+def potholes_dodged(count):
+    font = pygame.font.SysFont(None, 25)
+    text = font.render("DODGED: "+str(count), True, black)
+    gameDisplay.blit(text, (0,0))
 
 def potholes(holex, holey, holew, holeh, color):
     pygame.draw.rect(gameDisplay, color, [holex, holey, holew, holeh])
@@ -83,16 +86,19 @@ def game_loop():
     #potholes
     hole_startx = random.randrange(0, display_width)
     hole_starty = -300
-    hole_speed = 5
+    hole_speed = 3
     hole_width = 75
     hole_height = 75
 
     #grass
     grass_startx = random.randrange(0, display_width)
     grass_starty = -700
-    grass_speed = 5
+    grass_speed = 7
     grass_width = 75
     grass_height = 75
+
+    #number of blocks dodged
+    dodged = 0
 
 
     gameExit = False
@@ -130,9 +136,11 @@ def game_loop():
 
         #BUNNY
         bunny (x,y)
+        potholes_dodged(dodged)
 
 #EVENT LOGIC STATEMENT
 
+        #WALLS
         if x>display_width - bunny_width or x < -1:
             fell()
 
@@ -146,6 +154,9 @@ def game_loop():
         if hole_starty> display_height:
             hole_starty = 0 - hole_height
             hole_startx = random.randrange(0, display_width)
+            dodged +=1
+            hole_speed += .5
+            
 
         #FALLING IN THE POTHOLES
         if y <hole_starty+hole_height:
@@ -154,6 +165,8 @@ def game_loop():
             if x > hole_startx and x < hole_startx + hole_width or x+bunny_width > hole_startx and x + bunny_width < hole_startx+hole_width:
                 print('x crossover')
                 fell()
+
+
         
         pygame.display.update()
         clock.tick(60)
